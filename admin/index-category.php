@@ -2,18 +2,13 @@
 <?php 
 include('../db.php');
 
-$errMsg = [];
-if($_SERVER['REQUEST_METHOD']=='POST'){
 
-    $name = $_POST['name'];
-    $sql = "INSERT INTO  categories (name) VALUES (:name)";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute(['name'=>$name]);
+$sql = "SELECT * FROM categories";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
 
-    
+$categories = $stmt->fetchAll();
 
-
-}
 
 ?>
 
@@ -42,29 +37,65 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
       <!-- Main Content -->
       <div class="main-content">
         <section class="section">
-
-        <div class="col-12 col-md-6 col-lg-5">
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12 col-md-6 col-lg-6">
                 <div class="card">
                   <div class="card-header">
-                    <h4>Category create</h4>
+                    <h4>Categories Table</h4>
                   </div>
-                  <form action="" method="post">
                   <div class="card-body">
-                    <div class="form-group">
-                      <label>Category</label>
-                      <input type="text" name="name" class="form-control">
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-md">
+                        <tr>
+                          <th>#</th>
+                          <th>Name</th>
+                        
+                          <th>Status</th>
+                          <th>edit</th>
+                          <th>delete</th>
+                        </tr>
+                        <?php  $i = 1 ?>
+                        <?php foreach ($categories as  $category) { ?>
+                            
+                            
+                        <tr>
+                          <td><?php echo $i++  ?></td>
+                          <td><?php echo $category['name'] ?></td>
+                          
+                          <td>
+                            <div class="badge badge-success">Active</div>
+                          </td>
+                          <td><a href="update-category.php?category_id=<?php echo  $category['id']?>" class="btn btn-primary">Edit</a></td>
+                          <td><a href="#" class="btn btn-danger">Delete</a></td>
+                        </tr>
+                        <?php }?>
+                       
+                      </table>
                     </div>
-                  
-                    
+                  </div>
                   <div class="card-footer text-right">
-                    <button class="btn btn-primary mr-1" type="submit">ADD</button>
+                    <nav class="d-inline-block">
+                      <ul class="pagination mb-0">
+                        <li class="page-item disabled">
+                          <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1 <span
+                              class="sr-only">(current)</span></a></li>
+                        <li class="page-item">
+                          <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                          <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                        </li>
+                      </ul>
+                    </nav>
                   </div>
                 </div>
-                </form>
-                
               </div>
-              
-
+           
+          </div>
         </section>
         <div class="settingSidebar">
           <a href="javascript:void(0)" class="settingPanelToggle"> <i class="fa fa-spin fa-cog"></i>

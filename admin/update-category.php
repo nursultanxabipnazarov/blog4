@@ -1,17 +1,32 @@
 
+
 <?php 
 include('../db.php');
 
-$errMsg = [];
-if($_SERVER['REQUEST_METHOD']=='POST'){
+// $errMsg = [];
+// if($_SERVER['REQUEST_METHOD']=='POST'){
 
-    $name = $_POST['name'];
-    $sql = "INSERT INTO  categories (name) VALUES (:name)";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute(['name'=>$name]);
+//     $name = $_POST['name'];
+//     $sql = "INSERT INTO  categories (name) VALUES (:name)";
+//     $stmt = $conn->prepare($sql);
+//     $stmt->execute(['name'=>$name]);
 
     
 
+
+// }
+if($_SERVER['REQUEST_METHOD']=='GET' && isset($_GET['category_id']) ){
+
+    $category_id = $_GET['category_id'];
+
+    $sql = "SELECT * FROM categories WHERE id = :category_id ";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute(['category_id'=>$category_id]);
+
+    $category = $stmt->fetch();
+    
+
+  
 
 }
 
@@ -47,12 +62,13 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                 <div class="card">
                   <div class="card-header">
                     <h4>Category create</h4>
+                  
                   </div>
                   <form action="" method="post">
                   <div class="card-body">
                     <div class="form-group">
                       <label>Category</label>
-                      <input type="text" name="name" class="form-control">
+                      <input type="text" name="name"  value="<?php echo $category['name'] ?>" class="form-control">
                     </div>
                   
                     

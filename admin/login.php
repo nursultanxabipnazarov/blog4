@@ -16,7 +16,7 @@ $users = $stmt->fetchAll();
 if($_SERVER['REQUEST_METHOD']=='POST'){
 
   
-  $email = $_POST['email'];
+  $email = $_POST['email'];  
   $password = $_POST['password'];
 
   foreach($users as $user){
