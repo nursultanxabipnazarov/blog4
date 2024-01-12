@@ -2,12 +2,24 @@
 <?php 
 include('../db.php');
 
+if($_SERVER['REQUEST_METHOD']=='GET' && isset($_GET['delete_id'])){
+
+  $delete_id = $_GET['delete_id'];
+
+  $sql = "DELETE FROM categories WHERE id=:id ";
+  $stmt = $conn->prepare($sql);
+  $stmt->execute([
+    'id'=>$delete_id
+  ]);
+
+}
 
 $sql = "SELECT * FROM categories";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 
 $categories = $stmt->fetchAll();
+
 
 
 ?>
@@ -67,7 +79,7 @@ $categories = $stmt->fetchAll();
                             <div class="badge badge-success">Active</div>
                           </td>
                           <td><a href="update-category.php?category_id=<?php echo  $category['id']?>" class="btn btn-primary">Edit</a></td>
-                          <td><a href="#" class="btn btn-danger">Delete</a></td>
+                          <td><a href="index-category.php?delete_id=<?php echo $category['id'] ?>" class="btn btn-danger">Delete</a></td>
                         </tr>
                         <?php }?>
                        

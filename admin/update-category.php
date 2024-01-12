@@ -3,18 +3,8 @@
 <?php 
 include('../db.php');
 
-// $errMsg = [];
-// if($_SERVER['REQUEST_METHOD']=='POST'){
+$errMsg = [];
 
-//     $name = $_POST['name'];
-//     $sql = "INSERT INTO  categories (name) VALUES (:name)";
-//     $stmt = $conn->prepare($sql);
-//     $stmt->execute(['name'=>$name]);
-
-    
-
-
-// }
 if($_SERVER['REQUEST_METHOD']=='GET' && isset($_GET['category_id']) ){
 
     $category_id = $_GET['category_id'];
@@ -24,11 +14,30 @@ if($_SERVER['REQUEST_METHOD']=='GET' && isset($_GET['category_id']) ){
     $stmt->execute(['category_id'=>$category_id]);
 
     $category = $stmt->fetch();
-    
 
-  
 
 }
+
+if($_SERVER['REQUEST_METHOD']=='POST'){
+
+
+ 
+  $name = $_POST['name'];
+  $category_id = $_POST['id'];
+
+
+  $sql = "UPDATE categories SET name = :name WHERE id=:id";
+  $stmt = $conn->prepare($sql);
+  $stmt->execute([
+    'name'=>$name,
+    'id'=>$category_id
+  ]);
+
+  header('location: index-category.php');
+
+}
+
+
 
 ?>
 
@@ -67,8 +76,10 @@ if($_SERVER['REQUEST_METHOD']=='GET' && isset($_GET['category_id']) ){
                   <form action="" method="post">
                   <div class="card-body">
                     <div class="form-group">
+                    
                       <label>Category</label>
-                      <input type="text" name="name"  value="<?php echo $category['name'] ?>" class="form-control">
+                      <input type="hidden" name="id" value="<?php echo $category['id'] ?>" >
+                      <input type="text" name="name"  value="<?php if(isset($category)){echo $category['name'];}  ?>" class="form-control">
                     </div>
                   
                     
@@ -77,9 +88,20 @@ if($_SERVER['REQUEST_METHOD']=='GET' && isset($_GET['category_id']) ){
                   </div>
                 </div>
                 </form>
+
+                <h1><?php 
+                if(!empty($category_id)){
+
+                  print_r($category_id);
+                }else{
+                  $category_id = '';
+                }
+                
+                ?></h1>
                 
               </div>
-              
+            
+         
 
         </section>
         <div class="settingSidebar">

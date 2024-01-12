@@ -18,9 +18,9 @@
               </ul>
             </li>
             <li class="dropdown">
-              <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="command"></i><span>Apps</span></a>
+              <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="command"></i><span>Posts</span></a>
               <ul class="dropdown-menu">
-                <li><a class="nav-link" href="chat.html">Chat</a></li>
+                <li><a class="nav-link" href="create-post.php">add post</a></li>
                 <li><a class="nav-link" href="portfolio.html">Portfolio</a></li>
                 <li><a class="nav-link" href="blog.html">Blog</a></li>
                 <li><a class="nav-link" href="calendar.html">Calendar</a></li>
