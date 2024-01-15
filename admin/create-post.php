@@ -1,6 +1,7 @@
 <?php 
 include('../db.php');
 
+$errMsg = [];
 $sql = "SELECT * FROM categories  ";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
@@ -18,20 +19,47 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['add-post'])){
    $imgError = $img['error'];
    $imgSize = $img['size'];
     
-   if(isset($img) && $imgError==0){
-    move_uploaded_file($imgTemp,"../img/".$imgName);
+ 
+   
+   if(empty($title)){
+      array_push($errMsg,"Title bos bolmasin")  ;
+   }elseif(strlen($title)<2){
+    array_push($errMsg,"Title 2 belgiden den kishi bolmasin ")  ;
+
+   }
+   if(trim($text)==""){
+
+    array_push($errMsg,"text   bos bolmasin")  ;
+
    }
 
-   $sql = "INSERT INTO posts (category_id,title,text,img) 
-   VALUES (:category_id,:title,:text,:img)";
+   if(empty($errMsg)){
+    if(isset($img) && $imgError==0){
+        move_uploaded_file($imgTemp,"../img/".$imgName);
+       }
+    
+    
+    
+       $sql = "INSERT INTO posts (category_id,title,text,img) 
+       VALUES (:category_id,:title,:text,:img)";
+    
+       $stmt = $conn->prepare($sql);
+       $stmt->execute([
+        'category_id'=>$category_id,
+        'title'=>$title,
+        'text'=>$text,
+        'img'=>$imgName
+       ]);
 
-   $stmt = $conn->prepare($sql);
-   $stmt->execute([
-    'category_id'=>$category_id,
-    'title'=>$title,
-    'text'=>$text,
-    'img'=>$imgName
-   ]);
+        $errMsg['post']="Post juklendi!";
+
+       
+       
+   }
+
+
+   
+
    
 //    echo '<pre>';
 //    print_r($img);
@@ -56,7 +84,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['add-post'])){
 </head>
 
 <body>
-    <div class="loader"></div>
+   
     <div id="app">
         <div class="main-wrapper main-wrapper-1">
             <div class="navbar-bg"></div>
@@ -73,8 +101,18 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['add-post'])){
                             <div class="card-header">
                                 <h4>Post create</h4>
                             </div>
-                            <form action="" method="post" enctype="multipart/form-data" >
+                            <form action="" method="post" enctype="multipart/form-data">
                                 <div class="card-body">
+                                    <?php   if(!empty($errMsg)):?>
+                                    <?php foreach($errMsg as $er): ?>
+                                    <?php if(isset($errMsg['post'])): ?>
+                                    <h3 class="text-success"> <?php echo $er?> </h3>
+                                    <?php else :?>
+                                    <li class="text-danger"><?php echo $er ?></li>
+                                    <?php endif ;?>
+                                    <?php endforeach ;?>
+                                    <?php endif ?>
+
                                     <div class="form-group">
                                         <label>Select category</label>
                                         <select name="category_id" class="form-control">
@@ -86,6 +124,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['add-post'])){
                                         </select>
                                     </div>
                                     <div class="form-group">
+
                                         <label>Post title</label>
                                         <input type="text" name="title" class="form-control" placeholder="title">
                                     </div>
@@ -100,7 +139,8 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['add-post'])){
                                         <label class="custom-file-label" for="customFile">Choose file</label>
                                     </div>
                                     <div class="card-footer text-right">
-                                        <button class="btn btn-primary mr-1" name="add-post" type="submit">Submit</button>
+                                        <button class="btn btn-primary mr-1" name="add-post"
+                                            type="submit">Submit</button>
                                     </div>
 
                                 </div>
