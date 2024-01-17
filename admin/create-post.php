@@ -33,6 +33,11 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['add-post'])){
 
    }
 
+   if($imgSize>104800000){
+    array_push($errMsg," fayl olshemi 10 mb tan az bolsin!")  ;
+
+   }
+
    if(empty($errMsg)){
     if(isset($img) && $imgError==0){
         move_uploaded_file($imgTemp,"../img/".$imgName);
@@ -130,7 +135,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['add-post'])){
                                     </div>
                                     <div class="form-group">
                                         <label>Text</label>
-                                        <textarea name="text" class="form-control">
+                                        <textarea id="ed" name="text" class="form-control">
 
                                     </textarea>
                                     </div>
@@ -252,6 +257,14 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['add-post'])){
     </div>
     <!-- General JS Scripts -->
     <?php include('js.php') ?>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+    <script>
+    ClassicEditor
+        .create( document.querySelector( '#ed' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
 
 </body>
 
