@@ -126,7 +126,7 @@ $posts = $stmt->fetchAll();
                                                         <div class="table-links">
                                                             <a href="single-post.php?post_id=<?php echo $post['id']; ?>   "> View</a>
                                                             <div class="bullet"></div>
-                                                            <a href="#">Edit</a>
+                                                            <a href="edit-post.php?post_id=<?php echo$post['id'] ?>">Edit</a>
                                                             <div class="bullet"></div>
                                                             <a href="#" class="text-danger">Trash</a>
                                                         </div>
