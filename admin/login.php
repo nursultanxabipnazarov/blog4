@@ -1,14 +1,9 @@
 
 <?php  
+session_start();
+
 
 include('../db.php');
-
-$sql = "SELECT *  FROM users";
-
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-
-$users = $stmt->fetchAll();
 
 
 
@@ -19,18 +14,29 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
   $email = $_POST['email'];  
   $password = $_POST['password'];
 
-  foreach($users as $user){
+       $sql = "SELECT * FROM users WHERE email = :email AND password=:password ";
+       $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            'email'=>$email,
+            'password'=>$password
+           ]);
+           $user = $stmt->fetch();
 
-    if($email==$user['email'] AND $password==$user['password']  ){
-       header('Location: index.php');
-    }else{
-      echo "qate";
-    }
+          if( $user['email']===$email && isset($user['email']) && isset($user['password']) ){
+
+            $_SESSION['role']= $user['role'];
+            header('Location: index.php');
+          }else{
+             
+              header('Location: login.php?error=Login yaki parol qate!');
+          }
+
+
  }
 
 
 
-}
+
 
 
 
@@ -68,11 +74,14 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
             <div class="card card-primary">
               <div class="card-header">
                 <h4>Login</h4>
+                <h6 style="color: red;"  ><?php 
+                  echo $_GET['error'];
+                ?></h6>
               </div>
               <div class="card-body">
                 <form method="POST" action="#" class="needs-validation" novalidate="">
                   <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email"  ><span style="color: red;" >*</span>Email</label>
                     <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
                     <div class="invalid-feedback">
                       Please fill in your email

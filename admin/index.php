@@ -1,3 +1,19 @@
+<?php 
+ session_start();
+include '../db.php';
+
+$role = $_SESSION['role'];
+
+if($role!=='admin'){
+  include 'errors-404.html';
+  exit;
+}
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
